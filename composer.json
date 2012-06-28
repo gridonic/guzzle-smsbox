@@ -1,0 +1,19 @@
+{
+    "name": "smsBox PHP API Wrapper",
+    "type": "library",
+    "description": "A PHP Wrapper for the smsBox HTTP XML API",
+    "keywords": ["smsbox, api, xml"],
+    "authors": [
+        {
+            "name": "Peter Siska",
+            "email": "pesche@gridonic.ch"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "guzzle/guzzle": "*"
+    },
+    "autoload": {
+        "psr-0": { "Gridonic\\SmsBox": "src/" }
+    }
+}
