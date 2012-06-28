@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridonic\SmsBox;
+namespace Gridonic\Guzzle\SmsBox;
 
 use Guzzle\Service\Client;
 use Guzzle\Service\Inspector;
@@ -8,16 +8,6 @@ use Guzzle\Service\Description\ServiceDescription;
 
 class SmsBoxClient extends Client
 {
-    /**
-     * @var string Username
-     */
-    protected $username;
-
-    /**
-     * @var string Password
-     */
-    protected $password;
-
     /**
      * Factory method to create a new SmsBoxClient
      *
@@ -33,42 +23,25 @@ class SmsBoxClient extends Client
     static function factory($config = array())
     {
         $default = array();
-        $required = array('base_url', 'username', 'password');
+        $required = array('base_url');
         $config = Inspector::prepareConfig($config, $default, $required);
 
-        $client = new self(
-            $config->get('base_url'),
-            $config->get('username'),
-            $config->get('password')
-
-        );
+        $client = new self($config->get('base_url'));
         $client->setConfig($config);
 
         // Uncomment the following two lines to use an XML service description
-        // $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml'));
+        $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml'));
 
         return $client;
-    }
-
-    public function getUsername() {
-        return $this->username;
-    }
-
-    public function getPassword() {
-        return $this->password;
     }
 
     /**
      * Client constructor
      *
      * @param string $baseUrl Base URL of the web service
-     * @param string $username API username
-     * @param string $password API password
      */
-    public function __construct($baseUrl, $username, $password)
+    public function __construct($baseUrl)
     {
         parent::__construct($baseUrl);
-        $this->username = $username;
-        $this->password = $password;
     }
 }

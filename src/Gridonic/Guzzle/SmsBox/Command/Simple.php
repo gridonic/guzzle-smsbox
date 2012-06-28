@@ -1,6 +1,6 @@
 <?php
 
-namespace Gridonic\SmsBox\Command;
+namespace Gridonic\Guzzle\SmsBox\Command;
 
 use Guzzle\Service\Command\AbstractCommand;
 
@@ -14,7 +14,15 @@ class Simple extends AbstractCommand
     protected function build()
     {
         $this->request = $this->client->get(array('user/websend', $this->data));
-        $this->request->setAuth($this->client->getUsername(), $this->client->getPassword());
+        $this->request->setHeader('X-Header', $this->get('other_value'));
+
+        echo('<pre>');
+        print_r($this->data);
+        echo('</pre>');
+
+        echo('<pre>');
+        print_r($this->getRequestHeaders());
+        echo('</pre>');
     }
 
     protected function process()

@@ -1,11 +1,17 @@
 {
-    "hash": "9419d2d870e545840ec14a9fe6d193b9",
+    "hash": "970283193f563b67edfd6859a2c9de27",
     "packages": [
         {
             "package": "guzzle/guzzle",
             "version": "dev-master",
             "source-reference": "v2.7.1",
             "commit-date": "1340762324"
+        },
+        {
+            "package": "monolog/monolog",
+            "version": "dev-master",
+            "source-reference": "6cbdc0410c08fb03d7eee6b69126661fcbb89c41",
+            "commit-date": "1340715384"
         },
         {
             "package": "symfony/event-dispatcher",
