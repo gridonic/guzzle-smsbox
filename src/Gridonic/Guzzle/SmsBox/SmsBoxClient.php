@@ -22,15 +22,15 @@ class SmsBoxClient extends Client
      */
     static function factory($config = array())
     {
-        $default = array();
+        $default  = array();
         $required = array('base_url');
-        $config = Inspector::prepareConfig($config, $default, $required);
+        $config   = Inspector::prepareConfig($config, $default, $required);
 
         $client = new self($config->get('base_url'));
         $client->setConfig($config);
 
         // Uncomment the following two lines to use an XML service description
-        $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml'));
+        // $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml'));
 
         return $client;
     }
@@ -43,5 +43,16 @@ class SmsBoxClient extends Client
     public function __construct($baseUrl)
     {
         parent::__construct($baseUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createRequest($method = RequestInterface::GET, $uri = null, $headers = null, $body = null)
+    {
+        $request = parent::createRequest($method, $uri, $headers, $body);
+        $request->setHeader('Content-Type', 'text/xml');
+
+        return $request;
     }
 }
