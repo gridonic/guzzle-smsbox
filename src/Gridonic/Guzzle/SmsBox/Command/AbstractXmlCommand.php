@@ -2,6 +2,10 @@
 
 namespace Gridonic\Guzzle\SmsBox\Command;
 
+use Gridonic\Guzzle\SmsBox\Common\SmsBoxResponse;
+use Gridonic\Guzzle\SmsBox\Common\SmsBoxException;
+use Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException;
+
 use Guzzle\Service\Command\AbstractCommand;
 
 /**
@@ -11,12 +15,8 @@ abstract class AbstractXmlCommand extends AbstractCommand
 {
     /**
      * Create the result of the command after the request has been completed.
-     *
-     * Sets the result as the response by default.  If the response is an XML
-     * document, this will set the result as a SimpleXMLElement.  If the XML
-     * response is invalid, the result will remain the Response, not XML.
-     * If an application/json response is received, the result will automat-
-     * ically become an array.
+     * We expect the response to be an XML, so this method converts the repons
+     * to a SimpleXMLElement object. Also, exceptions are thrown accordingly.
      */
     protected function process()
     {
@@ -25,31 +25,20 @@ abstract class AbstractXmlCommand extends AbstractCommand
 
         $contentType = $this->result->getContentType();
 
-        // Is the body an JSON document?  If so, set the result to be an array
-        if (stripos($contentType, 'json') !== false) {
-            $body = trim($this->result->getBody(true));
-            if ($body) {
-                $decoded = json_decode($body, true);
-                if (JSON_ERROR_NONE !== json_last_error()) {
-                    throw new JsonException('The response body can not be decoded to JSON', json_last_error());
-                }
-
-                $this->result = $decoded;
-            }
-        } if (stripos($contentType, 'xml') !== false) {
-            // Is the body an XML document?  If so, set the result to be a SimpleXMLElement
-            // If the body is available, then parse the XML
-            $body = trim($this->result->getBody(true));
-            if ($body) {
-                // Silently allow parsing the XML to fail
-                try {
-                    $xml = new \SimpleXMLElement($body);
-                    $this->result = $xml;
-                } catch (\Exception $e) {}
-            }
+        if (stripos($contentType, 'xml') === false) {
+            throw new SmsBoxException('API response must have the Content-Type XML set.');
         }
+
+        // save the response body as a sms box response
+        $body = trim($this->result->getBody(true));
+        $this->result = new SmsBoxResponse($body);
+
+        $this->handleResponseErrors($this->result);
     }
 
+    /**
+     * Prepares the request to the API.
+     */
     protected function build()
     {
         $xml = $this->buildXML()->saveXML();
@@ -96,10 +85,19 @@ abstract class AbstractXmlCommand extends AbstractCommand
         return $xml;
     }
 
+    /**
+     * Checks the XML response for errors.
+     * @param  SmsBoxResponse $xml XML response
+     */
+    protected function handleResponseErrors($xmlResponse) {
+        if ($xmlResponse->hasError()) {
+            throw new SmsBoxXmlException($xmlResponse);
+        }
+    }
 
     /**
      * {@inheritdoc}
-     * @return SimpleXMLElement
+     * @return SmsBoxResponse
      */
     public function getResult()
     {
