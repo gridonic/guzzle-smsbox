@@ -53,11 +53,6 @@ abstract class AbstractXmlCommand extends AbstractCommand
     protected function build()
     {
         $xml = $this->buildXML()->saveXML();
-
-        echo('<pre>');
-        print_r(htmlentities($xml));
-        echo('</pre>');
-
         $this->request = $this->client->post(null, null, $xml);
     }
 

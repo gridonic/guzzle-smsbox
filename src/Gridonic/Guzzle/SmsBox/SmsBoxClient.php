@@ -9,18 +9,6 @@ use Guzzle\Service\Description\ServiceDescription;
 class SmsBoxClient extends Client
 {
     /**
-     * The username for the API
-     * @var string
-     */
-    protected $username;
-
-    /**
-     * The password to use for the API
-     * @var string
-     */
-    protected $password;
-
-    /**
      * Sets the test mode on the client.
      * This actually still performs requests to the smsBox API
      * and retrieves the responses, without sending out messages.
@@ -49,13 +37,9 @@ class SmsBoxClient extends Client
             $config->get('base_url'),
             $config->get('username'),
             $config->get('password'),
-            $config->get('service'),
             $config->get('test')
         );
         $client->setConfig($config);
-
-        // Uncomment the following two lines to use an XML service description
-        // $client->setDescription(ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml'));
 
         return $client;
     }
@@ -68,9 +52,7 @@ class SmsBoxClient extends Client
     public function __construct($baseUrl, $username, $password, $test)
     {
         parent::__construct($baseUrl);
-        $this->username = $username;
-        $this->password = $password;
-        $this->test     = $test;
+        $this->test = $test;
     }
 
     /**
@@ -82,13 +64,5 @@ class SmsBoxClient extends Client
         $request->setHeader('Content-Type', 'text/xml');
 
         return $request;
-    }
-
-    /**
-     * Returns the username for this client.
-     * @return string The API username.
-     */
-    public function getUsername() {
-        return $this->username;
     }
 }
