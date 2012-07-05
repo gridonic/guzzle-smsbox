@@ -72,4 +72,12 @@ class SmsBoxXmlException extends SmsBoxException
     public function getErrorType() {
         return $this->errorType;
     }
+
+    /**
+     * Returns the response for the XML exception.
+     * @return SmsBoxXmlResponse The response object
+     */
+    public function getResponse() {
+        return $this->response;
+    }
 }

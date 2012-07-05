@@ -1,0 +1,15 @@
+HTTP/1.1 100 Continue
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Content-Type: text/xml;charset=UTF-8
+Content-Length: 302
+Date: Thu, 05 Jul 2012 15:04:00 GMT
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<SMSBoxXMLReply>
+  <ok/>
+  <command name="WEBSEND">
+    <receiver message="Test message" coding="0" operator="orange">+41790000000</receiver>
+  </command>
+  <requestUid>xml18108445</requestUid>
+</SMSBoxXMLReply>
