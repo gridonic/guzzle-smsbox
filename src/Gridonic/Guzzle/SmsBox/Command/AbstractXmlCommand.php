@@ -52,57 +52,55 @@ abstract class AbstractXmlCommand extends AbstractCommand
 
     protected function build()
     {
-        $args = $this->getApiCommand()->getParams();
-        $name = $this->get('guessOperator');
-
-        echo('<pre>');
-        var_dump($name);
-        echo('</pre>');
-
-        // echo('<pre>');
-        // print_r($args);
-        // echo('</pre>');
-
-        // echo('<pre>');
-        // print_r($this->data);
-        // echo('</pre>');
-
-        // build XML
-        $xml = '<?xml version="1.0" encoding="UTF-8" ?>
-<SMSBoxXMLRequest>
-    <username>'. $this->client->getConfig('username') .'</username>
-    <password>'. $this->client->getConfig('password') .'</password>
-    <command>'. $this->get('command') .'</command>
-    <parameters>
-        <receiver>'. $this->get('receiver') .'</receiver>
-        <service>'. $this->client->getConfig('service') .'</service>
-        <text>'. $this->get('text') .'</text>
-        <cost>0</cost>
-        <guessOperator/>
-        <test/>
-    </parameters>
-</SMSBoxXMLRequest>';
+        $xml = $this->buildXML()->saveXML();
 
         echo('<pre>');
         print_r(htmlentities($xml));
         echo('</pre>');
 
         $this->request = $this->client->post(null, null, $xml);
-        // $this->request->setBody($xml);
     }
 
-    // /**
-    //  * Compose the XML prolog that will be prepended to the
-    //  * message body.
-    //  * @return  string The XML prolog.
-    //  */
-    // abstract protected function buildXMLProlog();
+    /**
+     * Builds the XML for the request body.
+     * @return DOMDocument XML in DOMDocument format
+     */
+    protected function buildXML() {
+        $xml = new \DOMDocument('1.0', 'utf-8');
+        $xml->formatOutput = true;
 
-    // /**
-    //  * Build the XML body that will be used
-    //  * @return string The XML body.
-    //  */
-    // abstract protected function buildXMLBody();
+        $request = $xml->appendChild($xml->createElement('SMSBoxXMLRequest'));
+
+        // add command, username and password params
+        $username = $xml->createElement('username', $this->client->getConfig('username'));
+        $password = $xml->createElement('password', $this->client->getConfig('password'));
+        $command  = $xml->createElement('command', $this->get('command'));
+
+        $request->appendChild($username);
+        $request->appendChild($password);
+        $request->appendChild($command);
+
+        $params = $request->appendChild($xml->createElement('parameters'));
+
+        // add parameters
+        foreach ($this->getApiCommand()->getParams() as $name => $arg) {
+            if ($name !== 'command') {
+                if ($this->get($name) === null) {
+                    $params->appendChild($xml->createElement($name));
+                } else {
+                    $params->appendChild($xml->createElement($name, $this->get($name)));
+                }
+            }
+        }
+
+        // add test param if client is in test mode
+        if ($this->client->getConfig('test') === true) {
+            $params->appendChild($xml->createElement('test'));
+        }
+
+        return $xml;
+    }
+
 
     /**
      * {@inheritdoc}

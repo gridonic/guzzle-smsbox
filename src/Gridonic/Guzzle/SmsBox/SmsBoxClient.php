@@ -21,6 +21,14 @@ class SmsBoxClient extends Client
     protected $password;
 
     /**
+     * Sets the test mode on the client.
+     * This actually still performs requests to the smsBox API
+     * and retrieves the responses, without sending out messages.
+     * @var boolean
+     */
+    protected $test;
+
+    /**
      * Factory method to create a new SmsBoxClient
      *
      * @param array|Collection $config Configuration data. Array keys:
@@ -28,13 +36,12 @@ class SmsBoxClient extends Client
      *    base_url - Base URL of the smsBox service endpoint
      *    username - API username
      *    password - API password
-     *    service  - The smsBox assigned service name
      *
      * @return SmsBoxClient
      */
     static function factory($config = array())
     {
-        $default  = array();
+        $default  = array('test' => false);
         $required = array('base_url', 'username', 'password');
         $config   = Inspector::prepareConfig($config, $default, $required);
 
@@ -42,7 +49,8 @@ class SmsBoxClient extends Client
             $config->get('base_url'),
             $config->get('username'),
             $config->get('password'),
-            $config->get('service')
+            $config->get('service'),
+            $config->get('test')
         );
         $client->setConfig($config);
 
@@ -57,11 +65,12 @@ class SmsBoxClient extends Client
      *
      * @param string $baseUrl Base URL of the web service
      */
-    public function __construct($baseUrl, $username, $password)
+    public function __construct($baseUrl, $username, $password, $test)
     {
         parent::__construct($baseUrl);
         $this->username = $username;
         $this->password = $password;
+        $this->test     = $test;
     }
 
     /**

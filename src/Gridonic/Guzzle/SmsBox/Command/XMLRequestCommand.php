@@ -11,9 +11,10 @@ use Guzzle\Http\EntityBody as EntityBody;
  *
  * @guzzle command required="true"
  * @guzzle receiver required="true"
+ * @guzzle service required="true"
  * @guzzle text required="true"
  * @guzzle guessOperator required="false" default=""
  */
-class WebsendCommand extends AbstractXmlCommand
+class XMLRequestCommand extends AbstractXmlCommand
 {
 }
