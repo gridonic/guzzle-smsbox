@@ -39,7 +39,7 @@ class WebsendTest extends \Guzzle\Tests\GuzzleTestCase
      */
     protected function setUpCommand() {
         $this->command = $this->client->getCommand('websend', array(
-            'command'  => 'websend',
+            'cost'     => 20,
             'service'  => 'TEST',
             'receiver' => '+41790000000',
             'text'     => 'Test message',
@@ -118,7 +118,7 @@ class WebsendTest extends \Guzzle\Tests\GuzzleTestCase
             $this->assertTrue($result->hasError(), 'Sending an invalid XML needs to have the error set');
             $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException', $e, 'Wrong exception class for invalid XML content');
             $this->assertEquals($e->getErrorType(), 'xmlparseerror');
-            $this->assertEquals($e->getMessage(), 'Parse error at line 1: Content is not allowed in prolog.');
+            $this->assertEquals($e->getMessage(), 'Parse error at line 1: Content is not allowed in prolog. (xmlparseerror)');
             $this->assertNotEquals($e->getMessage(), 'The submitted XML document is not valid.');
 
             return;
@@ -145,7 +145,7 @@ class WebsendTest extends \Guzzle\Tests\GuzzleTestCase
             $this->assertTrue($result->hasError(), 'Accessing a wrong command needs to have the error set');
             $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException', $e, 'Wrong exception class for invalid commands');
             $this->assertEquals($e->getErrorType(), 'commandnoaccess');
-            $this->assertEquals($e->getMessage(), 'You do not have access to the requested command.');
+            $this->assertEquals($e->getMessage(), 'You do not have access to the requested command. (commandnoaccess)');
             $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxResponse', $e->getResponse());
 
             return;
@@ -160,7 +160,7 @@ class WebsendTest extends \Guzzle\Tests\GuzzleTestCase
     public function testWrongReceiver() {
         $this->client = $this->getServiceBuilder()->get('test.smsbox');
         $this->command = $this->client->getCommand('websend', array(
-            'command'  => 'websend',
+            'cost'     => 20,
             'service'  => 'TEST',
             'receiver' => '123456789',
             'text'     => 'Test message',

@@ -68,16 +68,11 @@ abstract class AbstractXmlCommand extends AbstractCommand
 
         // add parameters
         foreach ($this->getApiCommand()->getParams() as $name => $arg) {
-            if ($this->get($name) === null) {
+            if ($this->get($name) === true) {
                 $params->appendChild($xml->createElement($name));
-            } else {
+            } else if ($this->get($name) !== null) {
                 $params->appendChild($xml->createElement($name, $this->get($name)));
             }
-        }
-
-        // add test param if client is in test mode
-        if ($this->client->getConfig('test') === true) {
-            $params->appendChild($xml->createElement('test'));
         }
 
         return $xml;

@@ -5,9 +5,11 @@
     </types>
     <commands>
         <command name="websend" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
+            <param name="cost" required="true" />
             <param name="receiver" required="true" type="msisdn" />
             <param name="service" required="true" />
             <param name="text" required="true" />
+            <param name="test" required="false" default="false" />
             <param name="guessOperator" required="false" default="" />
         </command>
         <command name="userinfo" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">

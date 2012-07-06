@@ -61,9 +61,10 @@ class SmsBoxXmlException extends SmsBoxException
             } else if (array_key_exists($this->errorType, self::$errorTypes)) {
                 $this->message = self::$errorTypes[$this->errorType];
             }
+
+            $this->message .= ' ('. $this->errorType .')';
         }
 
-        // sicherstellen, dass alles korrekt zugewiesen wird
         parent::__construct($this->message, $code = 0);
     }
 
