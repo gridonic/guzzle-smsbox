@@ -14,9 +14,9 @@
     </testsuites>
 
     <filter>
-        <whitelist>
-            <directory suffix=".php">./src/Gridonic/Guzzle/SmsBox</directory>
-        </whitelist>
+        <blacklist>
+            <directory suffix=".php">./vendor</directory>
+        </blacklist>
     </filter>
 
 </phpunit>
