@@ -1,5 +1,6 @@
 index.php
-vendor
-log/*
-coverage
 phpunit.xml
+
+coverage
+log
+vendor
