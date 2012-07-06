@@ -36,6 +36,19 @@ class SmsBoxResponse
     }
 
     /**
+     * Returns the error value if one is set.
+     * Errors can have an optional value in the XML API response.
+     * @return string The error value in the XML response
+     */
+    public function getErrorValue() {
+        $errorValue = null;
+        if ($this->hasError() && (string) $this->xmlElement->error !== '') {
+            $errorValue = (string) $this->xmlElement->error;
+        }
+        return $errorValue;
+    }
+
+    /**
      * Returns the error tyoe of the error or null
      * @return string Error code as string
      */

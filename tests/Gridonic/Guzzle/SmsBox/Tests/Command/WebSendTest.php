@@ -97,6 +97,35 @@ class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
     }
 
     /**
+     * Tests a wrong XML content as a request to the API
+     */
+    public function testCommandXmlParseError() {
+        $this->client = $this->getServiceBuilder()->get('test.smsbox');
+        $this->setMockResponse($this->client, 'websend/failure_xml_parse_content');
+
+        $this->setupCommand();
+
+        $this->command->prepare();
+        $this->command->getRequest()->setBody('Some invalid content as the request body...');
+
+        try {
+            $result = $this->client->execute($this->command);
+        } catch (SmsBoxXmlException $e) {
+            $result = $this->command->getResult();
+
+            $this->assertTrue($result->hasError(), 'Sending an invalid XML needs to have the error set');
+            $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException', $e, 'Wrong exception class for invalid XML content');
+            $this->assertEquals($e->getErrorType(), 'xmlparseerror');
+            $this->assertEquals($e->getMessage(), 'Parse error at line 1: Content is not allowed in prolog.');
+            $this->assertNotEquals($e->getMessage(), 'The submitted XML document is not valid.');
+
+            return;
+        }
+
+        $this->fail('An exception has to be thrown for invalid XML content in the request.');
+    }
+
+    /**
      * [testCommandNoAccess description]
      * @return [type] [description]
      */

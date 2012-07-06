@@ -56,7 +56,9 @@ class SmsBoxXmlException extends SmsBoxException
         if ($xmlResponse->hasError()) {
             $this->errorType = $xmlResponse->getErrorType();
 
-            if (array_key_exists($this->errorType, self::$errorTypes)) {
+            if ($xmlResponse->getErrorValue() !== null) {
+                $this->message = $xmlResponse->getErrorValue();
+            } else if (array_key_exists($this->errorType, self::$errorTypes)) {
                 $this->message = self::$errorTypes[$this->errorType];
             }
         }
