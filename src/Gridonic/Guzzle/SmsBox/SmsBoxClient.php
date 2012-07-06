@@ -41,6 +41,10 @@ class SmsBoxClient extends Client
         );
         $client->setConfig($config);
 
+        // Add the XML service description to the client
+        $description = ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'guzzle_smsbox.xml');
+        $client->setDescription($description);
+
         return $client;
     }
 

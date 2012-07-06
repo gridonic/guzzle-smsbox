@@ -5,11 +5,13 @@ namespace Gridonic\Guzzle\SmsBox\Tests\Command;
 use Gridonic\Guzzle\SmsBox\Common\SmsBoxException;
 use Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException;
 
+use Guzzle\Service\Exception\ValidationException;
+
 /**
  * Main client test
  * @todo  Comment
  */
-class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
+class WebsendTest extends \Guzzle\Tests\GuzzleTestCase
 {
     /**
      * [$command description]
@@ -36,7 +38,7 @@ class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
      * Sets up the command to perform
      */
     protected function setUpCommand() {
-        $this->command = $this->client->getCommand('xml_request_command', array(
+        $this->command = $this->client->getCommand('websend', array(
             'command'  => 'websend',
             'service'  => 'TEST',
             'receiver' => '+41790000000',
@@ -150,5 +152,29 @@ class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
         }
 
         $this->fail('An exception should be thrown for invalid commands.');
+    }
+
+    /**
+     * Tests the wrong receiver parameter format.
+     */
+    public function testWrongReceiver() {
+        $this->client = $this->getServiceBuilder()->get('test.smsbox');
+        $this->command = $this->client->getCommand('websend', array(
+            'command'  => 'websend',
+            'service'  => 'TEST',
+            'receiver' => '123456789',
+            'text'     => 'Test message',
+        ));
+
+        try {
+            $this->command->prepare();
+        } catch (ValidationException $e) {
+            $this->assertInstanceOf('Guzzle\Service\Exception\ValidationException', $e, 'Wrong exception class for invalid receiver parameter');
+            $this->assertEquals($e->getMessage(), 'Validation errors: receiver: 123456789 does not match the regular expression');
+
+            return;
+        }
+
+        $this->fail('A wrong receiver format needs to throw a validation exception');
     }
 }

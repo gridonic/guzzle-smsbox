@@ -58,7 +58,7 @@ abstract class AbstractXmlCommand extends AbstractCommand
         // add command, username and password params
         $username = $xml->createElement('username', $this->client->getConfig('username'));
         $password = $xml->createElement('password', $this->client->getConfig('password'));
-        $command  = $xml->createElement('command', $this->get('command'));
+        $command  = $xml->createElement('command', strtoupper($this->getName()));
 
         $request->appendChild($username);
         $request->appendChild($password);
@@ -68,12 +68,10 @@ abstract class AbstractXmlCommand extends AbstractCommand
 
         // add parameters
         foreach ($this->getApiCommand()->getParams() as $name => $arg) {
-            if ($name !== 'command') {
-                if ($this->get($name) === null) {
-                    $params->appendChild($xml->createElement($name));
-                } else {
-                    $params->appendChild($xml->createElement($name, $this->get($name)));
-                }
+            if ($this->get($name) === null) {
+                $params->appendChild($xml->createElement($name));
+            } else {
+                $params->appendChild($xml->createElement($name, $this->get($name)));
             }
         }
 

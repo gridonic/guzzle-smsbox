@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client>
+    <types>
+        <type name="msisdn" class="Guzzle\Common\Validation\Regex" pattern="/\+\d+/" />
+    </types>
+    <commands>
+        <command name="websend" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
+            <param name="receiver" required="true" type="msisdn" />
+            <param name="service" required="true" />
+            <param name="text" required="true" />
+            <param name="guessOperator" required="false" default="" />
+        </command>
+        <command name="userinfo" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
+            <param name="msisdn" required="true" type="msisdn" />
+            <param name="includeRequests" required="false" default="" />
+            <param name="includeSentMessages" required="false" />
+        </command>
+    </commands>
+</client>
