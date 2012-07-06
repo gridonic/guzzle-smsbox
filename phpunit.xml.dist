@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./tests/bootstrap.php" colors="true" verbose="true">
+<phpunit bootstrap="./tests/bootstrap.php"
+         colors="true"
+         processIsolation="false"
+         verbose="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+
     <testsuites>
         <testsuite name="gridonic-guzzle-smsbox">
-            <directory suffix="Test.php">./tests</directory>
+            <directory>./tests/Gridonic/Guzzle/SmsBox/Tests</directory>
         </testsuite>
     </testsuites>
+
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./tests</directory>
-                <directory>./docs</directory>
-                <directory>./coverage</directory>
-                <directory>./vendor</directory>
-            </exclude>
+            <directory suffix=".php">./src/Gridonic/Guzzle/SmsBox</directory>
         </whitelist>
     </filter>
+
 </phpunit>

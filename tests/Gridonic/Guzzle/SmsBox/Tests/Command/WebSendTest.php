@@ -2,6 +2,9 @@
 
 namespace Gridonic\Guzzle\SmsBox\Tests\Command;
 
+use Gridonic\Guzzle\SmsBox\Common\SmsBoxException;
+use Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException;
+
 /**
  * Main client test
  * @todo  Comment
@@ -65,9 +68,32 @@ class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
 
         $this->client->execute($this->command);
         $result = $this->command->getResult();
+        $response_body = $this->command->getResponse()->getBody();
 
         $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxResponse', $result);
         $this->assertFalse($result->hasError());
+        $this->assertNull($result->getErrorType());
+        $this->assertEquals($response_body, $this->command->getResponseBody(false));
+        $this->assertEquals(htmlentities($response_body), $this->command->getResponseBody(true));
+    }
+
+    /**
+     * Testing a wrong content type in the reponse.
+     */
+    public function testWrongContentType() {
+        $this->client = $this->getServiceBuilder()->get('test.smsbox');
+        $this->setMockResponse($this->client, 'websend/failure_wrong_content_type');
+
+        $this->setupCommand();
+
+        try {
+            $this->client->execute($this->command);
+        } catch (SmsBoxException $e) {
+            $this->assertInstanceOf('Gridonic\Guzzle\SmsBox\Common\SmsBoxException', $e, 'Wrong exception class for invalid content types.');
+            return;
+        }
+
+        $this->fail('An exception has to be thrown for non-xml content types in the response.');
     }
 
     /**
@@ -82,7 +108,7 @@ class WebSendTest extends \Guzzle\Tests\GuzzleTestCase
 
         try {
             $this->client->execute($this->command);
-        } catch (\Exception $e) {
+        } catch (SmsBoxXmlException $e) {
             $result = $this->command->getResult();
 
             $this->assertTrue($result->hasError(), 'Accessing a wrong command needs to have the error set');

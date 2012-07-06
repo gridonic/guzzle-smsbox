@@ -1,3 +1,5 @@
+index.php
 vendor
 log/*
+coverage
 phpunit.xml

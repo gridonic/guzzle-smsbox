@@ -4,8 +4,6 @@ namespace Gridonic\Guzzle\SmsBox\Command;
 
 use Gridonic\Guzzle\SmsBox\Command\AbstractXmlCommand;
 
-use Guzzle\Http\EntityBody as EntityBody;
-
 /**
  * Sends an XML request to the smsBox HTTP API
  *
@@ -15,6 +13,6 @@ use Guzzle\Http\EntityBody as EntityBody;
  * @guzzle text required="true"
  * @guzzle guessOperator required="false" default=""
  */
-class XMLRequestCommand extends AbstractXmlCommand
+class XmlRequestCommand extends AbstractXmlCommand
 {
 }
