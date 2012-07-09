@@ -7,12 +7,18 @@ use Gridonic\Guzzle\SmsBox\Common\SmsBoxException;
 use Gridonic\Guzzle\SmsBox\Common\SmsBoxXmlException;
 
 use Guzzle\Service\Command\AbstractCommand;
+use Guzzle\Service\Exception\CommandException;
 
 /**
  * Abstract command implementing XML calls and XML responses
  */
 abstract class AbstractXmlCommand extends AbstractCommand
 {
+    /**
+     * The XML object used as body in the request
+     * @var DOMDocument
+     */
+    protected $requestXml;
     /**
      * Create the result of the command after the request has been completed.
      * We expect the response to be an XML, so this method converts the repons
@@ -41,8 +47,8 @@ abstract class AbstractXmlCommand extends AbstractCommand
      */
     protected function build()
     {
-        $xml = $this->buildXML()->saveXML();
-        $this->request = $this->client->post(null, null, $xml);
+        $this->requestXml = $this->buildXML();
+        $this->request = $this->client->post(null, null, $this->requestXml->saveXML());
     }
 
     /**
@@ -70,7 +76,7 @@ abstract class AbstractXmlCommand extends AbstractCommand
         foreach ($this->getApiCommand()->getParams() as $name => $arg) {
             if ($this->get($name) === true) {
                 $params->appendChild($xml->createElement($name));
-            } else if ($this->get($name) !== null) {
+            } else if (!is_null($this->get($name)) && $this->get($name) !== false) {
                 $params->appendChild($xml->createElement($name, $this->get($name)));
             }
         }
@@ -95,6 +101,21 @@ abstract class AbstractXmlCommand extends AbstractCommand
     public function getResult()
     {
         return parent::getResult();
+    }
+
+    /**
+     * Get the request XML object associated with the command
+     *
+     * @return DOMDocument
+     * @throws CommandException if the command has not been prepared
+     */
+    public function getRequestXml()
+    {
+        if (!$this->isPrepared()) {
+            throw new CommandException('The command must be prepared before retrieving the request XML');
+        }
+
+        return $this->requestXml;
     }
 
     /**
