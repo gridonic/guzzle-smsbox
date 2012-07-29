@@ -32,14 +32,22 @@ class SmsBoxXmlException extends SmsBoxException
      * @var array
      */
     protected static $errorTypes = array(
-        'xmlparseerror'   => "The submitted XML document is not valid.",
-        'dtdparseerror'   => "The submitted XML document doesn't properly follow the DTD.",
-        'wrongutf8'       => "The XML request document is not properly encoded in UTF-8.",
-        'userunknown'     => "The specified username is unknown.",
-        'wrongpassword'   => "The specified password is incorrect.",
-        'xmlapinoaccess'  => "You do not have access to any commands of the XML API.",
-        'commandnoaccess' => "You do not have access to the requested command.",
-        'parammissing'    => "One of the mandatory parameters is missing."
+        'xmlparseerror'       => "The submitted XML document is not valid.",
+        'dtdparseerror'       => "The submitted XML document doesn't properly follow the DTD.",
+        'wrongutf8'           => "The XML request document is not properly encoded in UTF-8.",
+        'userunknown'         => "The specified username is unknown.",
+        'wrongpassword'       => "The specified password is incorrect.",
+        'xmlapinoaccess'      => "You do not have access to any commands of the XML API.",
+        'commandnoaccess'     => "You do not have access to the requested command.",
+        'parammissing'        => "One of the mandatory parameters is missing.",
+        'paramnomatch'        => "One of the parameter values is incorrect (typically a range or data type problem). Details indicated in error description.",
+        'themenomatch'        => "The specified service does not exist.",
+        'deactivatedtheme'    => "The specified service is deactivated.",
+        'noaccess'            => "You do not have access to the specified service.",
+        'costnomatch'         => "The specified cost is incorrect or unauthorized.",
+        'badphone'            => "The phone number has a bad syntax (bad prefix, missing digits...).",
+        'blacklistmember'     => "The specified end-user is blacklisted.",
+        'selfblacklistmember' => "The specified end-user has blacklisted himself."
     );
 
     /**
@@ -52,7 +60,7 @@ class SmsBoxXmlException extends SmsBoxException
     public function __construct($xmlResponse) {
         $this->response = $xmlResponse;
 
-        // compose message
+        // Compose message.
         if ($xmlResponse->hasError()) {
             $this->errorType = $xmlResponse->getErrorType();
 
@@ -74,6 +82,13 @@ class SmsBoxXmlException extends SmsBoxException
      */
     public function getErrorType() {
         return $this->errorType;
+    }
+
+     /**
+     * @return array All possible error types and associated error messages.
+     */
+    public static function getErrorTypes() {
+      return static::$errorTypes;
     }
 
     /**

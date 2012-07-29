@@ -4,18 +4,27 @@
         <type name="msisdn" class="Guzzle\Common\Validation\Regex" pattern="/\+\d+/" />
     </types>
     <commands>
+        <!-- WEBSEND -->
         <command name="websend" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
             <param name="cost" required="true" />
+            <param name="guessOperator" required="false" default="true" />
             <param name="receiver" required="true" type="msisdn" />
             <param name="service" required="true" />
-            <param name="text" required="true" />
             <param name="test" required="false" default="false" />
-            <param name="guessOperator" required="false" default="false" />
+            <param name="text" required="true" />
         </command>
+        <!-- USERINFO -->
         <command name="userinfo" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
             <param name="msisdn" required="true" type="msisdn" />
             <param name="includeRequests" required="false" default="" />
             <param name="includeSentMessages" required="false" />
+        </command>
+        <!-- WEBSUBSCRIBE -->
+        <command name="websubscribe" class="Gridonic.Guzzle.SmsBox.Command.XmlRequestCommand">
+            <param name="msisdn" required="true" type="msisdn"/>
+            <param name="service" required="true" />
+            <param name="operator" required="false" />
+            <param name="silent" required="false" />
         </command>
     </commands>
 </client>

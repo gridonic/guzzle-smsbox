@@ -4,3 +4,8 @@ phpunit.xml
 coverage
 log
 vendor
+
+#ignore eclipse artifacts
+.buildpath
+.settings/*
+.project

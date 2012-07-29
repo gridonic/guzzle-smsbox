@@ -49,7 +49,7 @@ class SmsBoxResponse
     }
 
     /**
-     * Returns the error tyoe of the error or null
+     * Returns the error type of the error or null
      * @return string Error code as string
      */
     public function getErrorType() {
@@ -61,5 +61,12 @@ class SmsBoxResponse
             }
         }
         return null;
+    }
+
+     /**
+     * @return string RequestUid of the XML API response.
+     */
+    public function getRequestUid() {
+      return (string) $this->xmlElement->requestUid;
     }
 }
