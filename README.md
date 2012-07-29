@@ -1,5 +1,5 @@
-Introduction
-============
+Guzzle smsBox PHP API
+=====================
 
 Todo
 ====

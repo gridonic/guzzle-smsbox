@@ -3,6 +3,7 @@
     "type": "library",
     "description": "A PHP Wrapper for the smsBox HTTP XML API",
     "keywords": ["Guzzle", "smsBox"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Peter Siska",
@@ -11,10 +12,13 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "guzzle/guzzle": "*",
+        "guzzle/guzzle": "*"
+    },
+    "suggest": {
         "monolog/monolog": "*"
     },
     "autoload": {
         "psr-0": { "Gridonic\\Guzzle\\SmsBox": "src/" }
-    }
+    },
+    "minimum-stability": "dev",
 }
