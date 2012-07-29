@@ -1,6 +1,8 @@
 Guzzle smsBox PHP API
 =====================
 
+[![Build Status](https://secure.travis-ci.org/gridonic/guzzle-smsbox.png)](http://travis-ci.org/gridonic/guzzle-smsbox)
+
 Todo
 ====
 
