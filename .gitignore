@@ -1,9 +1,11 @@
 index.php
 phpunit.xml
-
 coverage
 log
 vendor
+.vagrant
+Vagrantfile
+composer.phar
 
 # ignore eclipse artifacts
 .buildpath

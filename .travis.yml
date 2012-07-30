@@ -5,4 +5,5 @@ before_script:
   - wget --quiet http://getcomposer.org/composer.phar
   - php composer.phar install
   - cp phpunit.xml.dist phpunit.xml
+  - phpunit --version
 script: phpunit
