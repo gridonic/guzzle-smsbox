@@ -10,7 +10,7 @@ use Guzzle\Service\Command\AbstractCommand;
 use Guzzle\Service\Exception\CommandException;
 
 /**
- * Abstract command implementing XML calls and XML responses
+ * Abstract command implementing XML calls and responses
  */
 abstract class AbstractXmlCommand extends AbstractCommand
 {
@@ -19,6 +19,7 @@ abstract class AbstractXmlCommand extends AbstractCommand
      * @var DOMDocument
      */
     protected $requestXml;
+
     /**
      * Create the result of the command after the request has been completed.
      * We expect the response to be an XML, so this method converts the repons
@@ -49,39 +50,6 @@ abstract class AbstractXmlCommand extends AbstractCommand
     {
         $this->requestXml = $this->buildXML();
         $this->request = $this->client->post(null, null, $this->requestXml->saveXML());
-    }
-
-    /**
-     * Builds the XML for the request body.
-     * @return DOMDocument XML in DOMDocument format
-     */
-    protected function buildXML() {
-        $xml = new \DOMDocument('1.0', 'utf-8');
-        $xml->formatOutput = true;
-
-        $request = $xml->appendChild($xml->createElement('SMSBoxXMLRequest'));
-
-        // add command, username and password params
-        $username = $xml->createElement('username', $this->client->getConfig('username'));
-        $password = $xml->createElement('password', $this->client->getConfig('password'));
-        $command  = $xml->createElement('command', strtoupper($this->getName()));
-
-        $request->appendChild($username);
-        $request->appendChild($password);
-        $request->appendChild($command);
-
-        $params = $request->appendChild($xml->createElement('parameters'));
-
-        // add parameters
-        foreach ($this->getApiCommand()->getParams() as $name => $arg) {
-            if ($this->get($name) === true) {
-                $params->appendChild($xml->createElement($name));
-            } else if (!is_null($this->get($name)) && $this->get($name) !== false) {
-                $params->appendChild($xml->createElement($name, $this->get($name)));
-            }
-        }
-
-        return $xml;
     }
 
     /**
