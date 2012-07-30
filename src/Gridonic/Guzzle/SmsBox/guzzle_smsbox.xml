@@ -26,5 +26,10 @@
             <param name="operator" required="false" />
             <param name="silent" required="false" />
         </command>
+        <!-- NOTIFICATION_REPLY -->
+        <command name="notification_reply" class="Gridonic.Guzzle.SmsBox.Command.XmlNotificationReplyCommand">
+            <param name="text" required="true" />
+            <param name="cost" required="false" />
+        </command>
     </commands>
 </client>

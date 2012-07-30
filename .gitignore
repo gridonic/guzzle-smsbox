@@ -1,4 +1,6 @@
 index.php
+reply.php
+.htaccess
 phpunit.xml
 coverage
 log
